@@ -49,6 +49,7 @@
             padding: 30px 40px;
             transition: background 0.2s, color 0.2s;
             line-height: 1.5;
+            scroll-behavior: smooth;
         }
 
         .container { max-width: 1500px; margin: 0 auto; width: 100%; }
@@ -89,6 +90,15 @@
             display: flex; align-items: center; gap: 6px;
         }
         .btn-secondary:hover { background: var(--border); }
+
+        .theme-toggle {
+            padding: 8px 18px; cursor: pointer; border-radius: 20px;
+            border: none; background: #2d4a7a; color: white;
+            font-weight: 600; font-size: 13px; transition: opacity 0.2s;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .theme-toggle:hover { opacity: 0.9; }
+        [data-theme="dark"] .theme-toggle { background: #3b82f6; }
 
         .plan-wrapper { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
 
@@ -140,8 +150,20 @@
         }
 
         /* -----------------------------------------
-           HOVER HIGHLIGHTING (HIGH CONTRAST COLORS)
+           HOVER & PULSE HIGHLIGHTING 
            ----------------------------------------- */
+        
+        @keyframes targetPulse {
+            0% { box-shadow: 0 0 0 0 var(--primary-blue); transform: scale(1); border-color: var(--primary-blue); }
+            50% { box-shadow: 0 0 0 15px transparent; transform: scale(1.08); border-color: var(--primary-blue); }
+            100% { box-shadow: 0 0 0 0 transparent; transform: scale(1); border-color: var(--border); }
+        }
+
+        .target-pulse {
+            animation: targetPulse 0.8s ease-out;
+            z-index: 60;
+        }
+
         .hl-active { background: var(--primary-blue) !important; border-color: transparent !important; transform: scale(1.04); z-index: 50; box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
         .hl-active .code, .hl-active .name { color: white !important; }
         .hl-active .info-icon { background: rgba(255,255,255,0.2); color: white; }
@@ -290,6 +312,7 @@
         .support-bubble a { color: var(--primary-blue); font-weight: bold; text-decoration: none; display: inline-block; margin-top: 8px; }
         .support-fab { width: 56px; height: 56px; border-radius: 50%; background: var(--primary-blue); color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 6px 16px rgba(0,0,0, 0.3); border: none; transition: transform 0.2s; }
         .support-fab:hover { transform: scale(1.08); }
+        [data-theme="dark"] .support-fab { background: #3b82f6; }
     </style>
 </head>
 <body data-theme="light">
@@ -302,7 +325,7 @@
         </div>
         <div class="nav-actions">
             <button class="btn-secondary" onclick="toggleLegend()">Guide</button>
-            <button id="themeBtn" class="btn-secondary" onclick="toggleTheme()">Dark</button>
+            <button id="themeBtn" class="theme-toggle" onclick="toggleTheme()">Dark</button>
         </div>
     </nav>
     <div class="plan-wrapper" id="planGrid"></div>
@@ -322,7 +345,6 @@
         <p class="modal-subtitle">Hover over any course to highlight its relationships. Here is what the colors mean:</p>
         
         <div class="legend-cards">
-            
             <div class="legend-grid">
                 <div class="legend-card" style="margin-bottom: 0;">
                     <div class="legend-box" style="background: var(--primary-blue);"></div>
@@ -331,7 +353,6 @@
                         <div class="legend-card-desc">The course currently being viewed.</div>
                     </div>
                 </div>
-
                 <div class="legend-card" style="margin-bottom: 0;">
                     <div class="legend-box" style="background: var(--level-header); color: var(--text-sub); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px;">i</div>
                     <div>
@@ -340,7 +361,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="legend-card">
                 <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 2px;">
                     <div class="legend-box leg-box-pre0" style="background:#ef4444; border: 2px solid #b91c1c; height: 24px;"></div>
@@ -355,7 +375,6 @@
                     <div class="legend-card-desc"><strong>Fading / Dashed Red: Indirect Prerequisite.</strong> Foundational course further back in the sequence. Gradient hues (e.g., lighter colors, or different border patterns) indicate distance in the chain.</div>
                 </div>
             </div>
-
             <div class="legend-card">
                 <div class="legend-box leg-box-post" style="background: #dcfce7; border: 2px solid #22c55e;"></div>
                 <div>
@@ -363,7 +382,6 @@
                     <div class="legend-card-desc">Courses that may be taken after successful completion.</div>
                 </div>
             </div>
-
             <div class="legend-card">
                 <div class="legend-box leg-box-co" style="background: #cffafe; border: 2px solid #06b6d4;"></div>
                 <div>
@@ -543,10 +561,10 @@
         const btn = document.getElementById('themeBtn');
         if (body.getAttribute('data-theme') === 'dark') {
             body.setAttribute('data-theme', 'light');
-            btn.innerHTML = 'Dark';
+            btn.innerHTML = '🌙 Dark';
         } else {
             body.setAttribute('data-theme', 'dark');
-            btn.innerHTML = 'Light';
+            btn.innerHTML = '☀️ Light';
         }
     }
 
@@ -590,6 +608,7 @@
             if (course.level > 8) return; 
             const card = document.createElement('div');
             card.className = 'course-card';
+            card.id = `card-${id}`; // Give each card an ID for scrolling
             
             const iconHtml = (course.link !== "#" && course.link !== "") 
                 ? `<a href="${course.link}" target="_blank" class="info-icon" onclick="event.stopPropagation()">i</a>` 
@@ -653,16 +672,28 @@
         ttNode.style.transform = `translate(${x}px, ${y}px)`; 
     }
 
-    let isTicking = false;
-    document.addEventListener('mousemove', e => { 
-        if (activeCard && !isTicking) {
-            window.requestAnimationFrame(() => {
-                moveTT(e);
-                isTicking = false;
-            });
-            isTicking = true;
-        } 
-    });
+    document.addEventListener('mousemove', e => { if (activeCard) moveTT(e); });
+
+    // --- NEW JUMP TO COURSE LOGIC ---
+    function jumpToCourse(id) {
+        showPanel(id);
+        hoverOn(id);
+        
+        const card = domCache[id];
+        if (card) {
+            // Scroll course into view
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Add pulse animation to highlight it
+            card.classList.remove('target-pulse');
+            void card.offsetWidth; // trigger reflow
+            card.classList.add('target-pulse');
+            
+            setTimeout(() => {
+                card.classList.remove('target-pulse');
+            }, 800);
+        }
+    }
 
     function showPanel(id) {
         const c = courseDB[id];
@@ -672,13 +703,13 @@
                 if (collection.size === 0) return '<div class="p-empty">None</div>';
                 let html = '<div class="chips">';
                 collection.forEach((depth, k) => {
-                    html += `<div class="chip chip-pre-${depth > 3 ? 3 : depth}" onclick="showPanel('${k}')">${courseDB[k].code}</div>`;
+                    html += `<div class="chip chip-pre-${depth > 3 ? 3 : depth}" onclick="jumpToCourse('${k}')">${courseDB[k].code}</div>`;
                 });
                 html += '</div>'; return html;
             } else {
                 if (!collection.size) return '<div class="p-empty">None</div>';
                 let cClass = type === 'post' ? 'chip-post' : 'chip-co';
-                return `<div class="chips">${Array.from(collection).map(k => `<div class="chip ${cClass}" onclick="showPanel('${k}')">${courseDB[k].code}</div>`).join('')}</div>`;
+                return `<div class="chips">${Array.from(collection).map(k => `<div class="chip ${cClass}" onclick="jumpToCourse('${k}')">${courseDB[k].code}</div>`).join('')}</div>`;
             }
         };
         const cNumHtml = c.cNum ? `<span class="panel-cnum">${c.cNum}</span>` : '';
