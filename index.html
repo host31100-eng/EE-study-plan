@@ -653,7 +653,16 @@
         ttNode.style.transform = `translate(${x}px, ${y}px)`; 
     }
 
-    document.addEventListener('mousemove', e => { if (activeCard) moveTT(e); });
+    let isTicking = false;
+    document.addEventListener('mousemove', e => { 
+        if (activeCard && !isTicking) {
+            window.requestAnimationFrame(() => {
+                moveTT(e);
+                isTicking = false;
+            });
+            isTicking = true;
+        } 
+    });
 
     function showPanel(id) {
         const c = courseDB[id];
