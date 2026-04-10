@@ -228,6 +228,8 @@
         .chip-pre-3 { background: #fef2f2; border: 1px dotted #fca5a5; color: #b91c1c; }
         .chip-post { background: #22c55e; border: 1px solid #16a34a; }
         .chip-co { background: #3b82f6; border: 1px solid #2563eb; }
+        .chip-elective { background: transparent; border: 1.5px dashed #94a3b8; color: #64748b !important; cursor: default !important; }
+        .chip-elective:hover { transform: none !important; }
 
         [data-theme="dark"] .chip-pre-0 { background: #dc2626; border: 1px solid #f87171; }
         [data-theme="dark"] .chip-pre-1 { background: #7f1d1d; border: 1px solid #ef4444; color: #fecaca; }
@@ -235,6 +237,7 @@
         [data-theme="dark"] .chip-pre-3 { background: #2c0606; border: 1px dotted #991b1b; color: #f87171; }
         [data-theme="dark"] .chip-post { background: #16a34a; border: 1px solid #22c55e; }
         [data-theme="dark"] .chip-co { background: #2563eb; border: 1px solid #60a5fa; }
+        [data-theme="dark"] .chip-elective { border-color: #475569; color: #94a3b8 !important; }
 
         .panel-link {
             display: flex; align-items: center; justify-content: center;
@@ -363,6 +366,13 @@
                     <div class="legend-card-desc">A course that must be taken concurrently.</div>
                 </div>
             </div>
+            <div class="legend-card">
+                <div class="legend-box" style="background: transparent; border: 1.5px dashed #94a3b8; display:flex; align-items:center; justify-content:center; font-size:13px;">⭐</div>
+                <div>
+                    <div class="legend-card-title">Program Elective</div>
+                    <div class="legend-card-desc">An elective course that is <strong>not shown</strong> on the main plan grid. It may appear as a prerequisite or unlock for other courses.</div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -371,7 +381,7 @@
     <div class="support-bubble" id="supportBubble">
         If you encounter a problem using this site, please tell me about it through my email:
         <br>
-        <a href="mailto:yamankhalid1234@gmail.com">✉️ yamankhalid1234@gmail.com</a>
+        <a href="/cdn-cgi/l/email-protection#6e170f030f0005060f02070a5f5c5d5a2e09030f0702400d0103">✉️ <span class="__cf_email__" data-cfemail="720b131f131c191a131e1b164340414632151f131b1e5c111d1f">[email&#160;protected]</span></a>
     </div>
     <button class="support-fab" onclick="toggleSupport()">
         <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -381,7 +391,7 @@
     </button>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     const courseDB = {
         // --- LEVEL 1 ---
         "ENGR100": { code: "ENGR 100", cNum: "2200-100", name: "Introduction to Engineering", short: "Intro to Engineering", level: 1, prereq: [], coreq: [], link: "https://drive.google.com/drive/u/2/folders/1WRjZgKdz_H2P6d2a39HVZf5-27e2wheq" },
@@ -404,7 +414,6 @@
 
         // --- LEVEL 3 ---
         "EE231":   { code: "EE 231",   cNum: "2202-231", name: "Digital Logic Design", short: "Digital Logic Design", level: 3, prereq: ["MATH145"], coreq: ["EE232"], link: "https://drive.google.com/drive/u/2/folders/1YqwTXlOfXk0U1TJ3j2IKCJOP4bLYrATx" },
-        // FIX: EE241 coreq should only be EE247; MATH240 is a separate coreq listed in PDF (0817-240 listed under coreq column)
         "EE241":   { code: "EE 241",   cNum: "2202-241", name: "Electric Circuits-I", short: "Electric Circuits 1", level: 3, prereq: ["PHYS141"], coreq: ["MATH240", "EE247"], link: "https://drive.google.com/drive/u/2/folders/1TlAmrUq-ftG4NNGZUurCRCxACnSy_VgK" },
         "MATH240": { code: "MATH 240", cNum: "0817-240", name: "Differential Equations", short: "Differential Equations", level: 3, prereq: ["MATH145"], coreq: [], link: "https://drive.google.com/drive/u/2/folders/1_HN759r8UqvOJekB3TTQUiZnNix7hEXn" },
         "EE232":   { code: "EE 232",   cNum: "2202-232", name: "Digital Logic Design Lab", short: "Digital Logic Lab", level: 3, prereq: [], coreq: ["EE231"], link: "https://drive.google.com/drive/u/2/folders/16t5sM350WoN_Nh4fWPx_15zUbBRQxpH4" },
@@ -416,11 +425,9 @@
         // --- LEVEL 4 ---
         "ENG137":  { code: "ENG 137",  cNum: "1722-137", name: "Technical Writing", short: "Technical Writing", level: 4, prereq: ["ENG134", "ENG138"], coreq: [], link: "https://drive.google.com/drive/u/2/folders/1r3dQ-3qdU5JGSkA-FXxIK1O7dD5qemDx" },
         "EE243":   { code: "EE 243",   cNum: "2202-243", name: "Electronics-I", short: "Electronics 1", level: 4, prereq: ["EE241", "CHEM142"], coreq: ["EE248"], link: "https://drive.google.com/drive/u/2/folders/1Y_tA2YRKtaWCp8U7y32jEKwnuPTf-pPX" },
-        // FIX: EE242 coreq per PDF is MATH215 and EE247; EE247 is listed as coreq in PDF for EE242
         "EE242":   { code: "EE 242",   cNum: "2202-242", name: "Electric Circuits-II", short: "Electric Circuits 2", level: 4, prereq: ["EE241"], coreq: ["MATH215", "EE247"], link: "https://drive.google.com/drive/u/2/folders/1S_IGcvhHVC98yr1tVT1UjZ9hcgph8QKT" },
         "MATH215": { code: "MATH 215", cNum: "0817-215", name: "Math for Electrical Engineering", short: "Math for EE", level: 4, prereq: ["MATH145"], coreq: [], link: "https://drive.google.com/drive/u/2/folders/1nRg2VwBjynNsHyRznUaLeArVvEJJVMCd" },
         "EE248":   { code: "EE 248",   cNum: "2202-248", name: "Electronic Circuits Lab", short: "Electronic Circuits Lab", level: 4, prereq: ["EE247"], coreq: ["EE243"], link: "https://drive.google.com/drive/u/2/folders/1QXpD6Snak2J-34UmU6ZGwWvHmdM00wSg" },
-        // FIX: CS204 prereq per PDF is MATH144 (0817-144)
         "CS204":   { code: "CS 204",   cNum: "0901-204", name: "Engineering Programming", short: "Engineering Programming", level: 4, prereq: ["MATH144"], coreq: [], link: "https://drive.google.com/drive/u/2/folders/1G7TY3sCjm7gbIE12ujOq5KKZ5rJuLEW5" },
         "UE3":     { code: "U.E 3",    cNum: "1900-102", name: "Islamic Culture", short: "Islamic Culture", level: 4, prereq: [], coreq: [], link: "https://drive.google.com/drive/u/2/folders/10hE2oDsbqmalBYngey72B162NR6pOsoU" },
 
@@ -428,20 +435,15 @@
         "EE330":   { code: "EE 330",   cNum: "2202-330", name: "Signals & Systems", short: "Signals & Systems", level: 5, prereq: ["MATH240", "MATH215", "EE242"], coreq: [], link: "https://drive.google.com/drive/u/2/folders/17w9RoEGUcNJxuipNO12iC4BXRobbjv6m" },
         "EE331":   { code: "EE 331",   cNum: "2202-331", name: "Engineering Electromagnetism", short: "Engineering Electromagnetism", level: 5, prereq: ["MATH244", "EE242"], coreq: [], link: "https://drive.google.com/drive/u/2/folders/1bdk2ZS6F8oomsLn5OT8qpPN-zrnLfCBU" },
         "EE244":   { code: "EE 244",   cNum: "2202-244", name: "Electronics-II", short: "Electronics 2", level: 5, prereq: ["EE243"], coreq: [], link: "https://drive.google.com/drive/u/2/folders/1rtAsixrykjESjqM928ECGkKcp0wY0t2a" },
-        // FIX: EE233 prereq should include CS204 (0901-204) per PDF
         "EE233":   { code: "EE 233",   cNum: "2202-233", name: "Microprocessor", short: "Microprocessor", level: 5, prereq: ["EE231", "CS204"], coreq: ["EE234"], link: "https://drive.google.com/drive/u/2/folders/1IglMFdeA2FkvYy3NGlTRUyrtN2WVLCE2" },
-        // FIX: EE234 prereq should be EE232 per PDF; coreq is EE233
         "EE234":   { code: "EE 234",   cNum: "2202-234", name: "Microprocessor Lab", short: "Microprocessor Lab", level: 5, prereq: ["EE232"], coreq: ["EE233"], link: "https://drive.google.com/drive/u/2/folders/1O1V4VH1AgwjC3elFxxh2-6eA9Tv2gSNC" },
         "ENGR340": { code: "ENGR 340", cNum: "2200-340", name: "Probability & Random Processes", short: "Probability & Random Processes", level: 5, prereq: ["MATH215"], coreq: [], link: "https://drive.google.com/drive/u/2/folders/1PY9Cr_swkjzgbJgTMGSjly14CSnIMtly" },
 
         // --- LEVEL 6 ---
         "EE335":   { code: "EE 335",   cNum: "2202-335", name: "Electric Energy & Power Systems", short: "Electric Energy & Power Systems", level: 6, prereq: ["EE242", "EE331"], coreq: ["EE336"], link: "https://drive.google.com/drive/u/2/folders/1XxNxfjeMXBStJLZRmVS6KNAl2mySQTBp" },
         "EE332":   { code: "EE 332",   cNum: "2202-332", name: "Communication Systems Fundamentals", short: "Communication Systems Fund.", level: 6, prereq: ["EE330", "ENGR340"], coreq: ["EE333"], link: "https://drive.google.com/drive/u/2/folders/1Bncy-hwhomUxG3R897YJpfFeuKtmEkr0" },
-        // FIX: EE336 prereq should include ENG137 per PDF (listed as 2200-137 which maps to ENG137 by context)
         "EE336":   { code: "EE 336",   cNum: "2202-336", name: "Electric Energy & Power Systems Lab", short: "Elec. Energy & Power Lab", level: 6, prereq: ["ENG137"], coreq: ["EE335"], link: "https://drive.google.com/drive/u/2/folders/1FXDGh1UR7yJko-eyVWM8ZT0SHHH8bcMc" },
-        // FIX: EE333 prereq should be EE248 per PDF
         "EE333":   { code: "EE 333",   cNum: "2202-333", name: "Communication Systems Fundamentals Lab", short: "Communication Systems Lab", level: 6, prereq: ["EE248"], coreq: ["EE332"], link: "https://drive.google.com/drive/u/2/folders/1g15vI_mq7VZ9o0UZQAO1pCIlsPJ5ifFh" },
-        // FIX: ENGR310 prereq should include CS204 (0901-204) per PDF
         "ENGR310": { code: "ENGR 310", cNum: "2200-310", name: "Numerical Methods", short: "Numerical Methods", level: 6, prereq: ["ENGR105", "MATH240", "CS204"], coreq: [], link: "https://drive.google.com/drive/u/2/folders/1829YMVXaJitDK-sbXBfDhVisYgVxggqQ" },
         "ENGR307": { code: "ENGR 307", cNum: "2200-307", name: "Engineering Economics", short: "Engineering Economics", level: 6, prereq: ["ENGR100"], coreq: [], link: "https://drive.google.com/drive/u/2/folders/1pG5kVCH8WkHAgerj616WF7t8dbHnA-xG" },
         "ENGR223": { code: "ENGR 223", cNum: "2200-223", name: "Engineering Mechanics", short: "Engineering Mechanics", level: 6, prereq: ["PHY140", "MATH145"], coreq: [], link: "https://drive.google.com/drive/u/2/folders/1OHpIB3rK5m3D-wVRDvLy99OqE6RCQHMy" },
@@ -450,7 +452,6 @@
         "EE429":   { code: "EE 429",   cNum: "2202-429", name: "Mechatronics", short: "Mechatronics", level: 7, prereq: ["EE233", "EE330"], coreq: ["EE431"], link: "https://drive.google.com/drive/u/2/folders/1HXz8_6m54Y45UiRS7aPPw_30IvPmVBXj" },
         "EE430":   { code: "EE 430",   cNum: "2202-430", name: "Analogue Control Systems", short: "Analogue Control Systems", level: 7, prereq: ["EE330"], coreq: ["EE431"], link: "https://drive.google.com/drive/u/2/folders/1Bm3XOcx_H2XXqE-3tdTx-EVv4WGJz0I5" },
         "EE495":   { code: "EE 495",   cNum: "2202-495", name: "Senior Design-I", short: "Senior Design 1", level: 7, prereq: ["EE335", "ENGR307", "ENG137"], coreq: [], link: "https://drive.google.com/drive/u/2/folders/1zElrmyQ2sBKalo4fPeLZgY58sAEqmJ73" },
-        // FIX: EE431 prereq should include EE234 per PDF (2202-234)
         "EE431":   { code: "EE 431",   cNum: "2202-431", name: "Mechatronics & Control Lab", short: "Mechatronics & Control Lab", level: 7, prereq: ["EE234"], coreq: ["EE429", "EE430"], link: "https://drive.google.com/drive/u/2/folders/1T4eBtzEQ8j2kRsh8chx187i0fUepc0ns" },
         "EE434":   { code: "EE 434",   cNum: "2202-434", name: "Digital Systems & Signal Processing", short: "Digital Systems & Signal Proc.", level: 7, prereq: ["EE330", "ENGR310"], coreq: [], link: "https://drive.google.com/drive/u/2/folders/11qCoKsrrnVlg2lyy8KuxkYXXlkRHRMot" },
         "TE1":     { code: "T.E 1",    cNum: "2202-4XX", name: "Technical Elective-I", short: "Technical Elective 1", level: 7, prereq: [], coreq: [], link: "#" },
@@ -459,7 +460,6 @@
         // --- LEVEL 8 ---
         "EE496":   { code: "EE 496",   cNum: "2202-496", name: "Senior Design-II", short: "Senior Design 2", level: 8, prereq: ["EE495"], coreq: [], link: "https://drive.google.com/drive/u/2/folders/1nR-VNNfHk-FeH5c9h4RhS6I6Rdezspkr" },
         "ENGR205": { code: "ENGR 205", cNum: "2200-205", name: "Materials Science", short: "Material Science", level: 8, prereq: ["CHEM142"], coreq: [], link: "https://drive.google.com/drive/u/2/folders/1HwgAKAFV22xrQWfSpCokNsqp0HNESjG0" },
-        // FIX: ENGR303 prereq per PDF is PHY140 and CHEM142
         "ENGR303": { code: "ENGR 303", cNum: "2200-303", name: "Thermo-Fluids", short: "Thermo Fluids", level: 8, prereq: ["PHY140", "CHEM142"], coreq: [], link: "https://drive.google.com/drive/u/2/folders/1tcCn8-oLhPkrU4e5fJscgHz8diEd4GoZ" },
         "MGT292":  { code: "MGT 292",  cNum: "0622-292", name: "Management Fundamentals & Skills", short: "Management Fund. & Skills", level: 8, prereq: [], coreq: [], link: "https://drive.google.com/drive/u/2/folders/17xPZgOukREOjQYJeWcNJuFHfvMBGr56G" },
         "TE2":     { code: "T.E 2",    cNum: "2202-4XX", name: "Technical Elective-II", short: "Technical Elective 2", level: 8, prereq: [], coreq: [], link: "#" },
@@ -468,18 +468,15 @@
         // --- INVISIBLE ADVANCED COURSES ---
         "EE480":   { code: "EE 480",   cNum: "2202-480", name: "Electric Machines", level: 99, prereq: ["EE335", "EE336"], coreq: [], link: "#" },
         "EE481":   { code: "EE 481",   cNum: "2202-481", name: "Power Systems", level: 99, prereq: ["EE335", "EE336"], coreq: [], link: "#" },
-        // FIX: EE482 prereq should include EE336 per PDF
         "EE482":   { code: "EE 482",   cNum: "2202-482", name: "Power Electronics", level: 99, prereq: ["EE243", "EE335", "EE336"], coreq: [], link: "#" },
         "EE483":   { code: "EE 483",   cNum: "2202-483", name: "Modern Control Systems", level: 99, prereq: ["EE430"], coreq: [], link: "#" },
         "EE484":   { code: "EE 484",   cNum: "2202-484", name: "Industrial Control", level: 99, prereq: ["EE231", "EE429"], coreq: [], link: "#" },
-        // FIX: EE485 prereq should include EE483 per PDF
         "EE485":   { code: "EE 485",   cNum: "2202-485", name: "Digital Control Systems", level: 99, prereq: ["EE430", "EE483"], coreq: [], link: "#" },
         "EE486":   { code: "EE 486",   cNum: "2202-486", name: "Digital Communication Systems", level: 99, prereq: ["EE332", "EE333"], coreq: [], link: "#" },
         "EE487":   { code: "EE 487",   cNum: "2202-487", name: "Communication Electronics", level: 99, prereq: ["EE332", "EE244", "EE333"], coreq: [], link: "#" },
         "EE488":   { code: "EE 488",   cNum: "2202-488", name: "Wireless and Cellular Communication", level: 99, prereq: ["EE486", "EE332"], coreq: [], link: "#" },
         "EE489":   { code: "EE 489",   cNum: "2202-489", name: "Special Topic", level: 99, prereq: [], coreq: [], link: "#" },
         "EE490":   { code: "EE 490",   cNum: "2202-490", name: "Undergraduate Research", level: 99, prereq: [], coreq: [], link: "#" },
-        // FIX: EE493 prereq should include EE244 per PDF (2202-244)
         "EE493":   { code: "EE 493",   cNum: "2202-493", name: "Optical Fiber Communication", level: 99, prereq: ["EE331", "EE244"], coreq: [], link: "#" },
         "ENGR399": { code: "ENGR 399", cNum: "2200-399", name: "Engineering Training", level: 99, prereq: ["ENG137"], coreq: [], link: "#" }
     };
@@ -647,7 +644,13 @@
         ttNode.style.transform = `translate(${x}px, ${y}px)`; 
     }
 
-    document.addEventListener('mousemove', e => { if (activeCard) moveTT(e); });
+    document.addEventListener('mousemove', e => { 
+        if (activeCard) {
+            window.requestAnimationFrame(() => {
+                moveTT(e);
+            });
+        } 
+    });
 
     function jumpToCourse(id) {
         showPanel(id);
@@ -665,24 +668,36 @@
     function showPanel(id) {
         const c = courseDB[id];
         const rels = relationCache[id];
+        const isElective = (k) => courseDB[k] && courseDB[k].level === 99;
         const buildChips = (collection, type, isMap = false) => {
             if (isMap) {
                 if (collection.size === 0) return '<div class="p-empty">None</div>';
                 let html = '<div class="chips">';
                 collection.forEach((depth, k) => {
-                    html += `<div class="chip chip-pre-${depth > 3 ? 3 : depth}" onclick="jumpToCourse('${k}')">${courseDB[k].code}</div>`;
+                    if (isElective(k)) {
+                        html += `<div class="chip chip-elective" title="Elective — not on main plan">⭐ ${courseDB[k].code}</div>`;
+                    } else {
+                        html += `<div class="chip chip-pre-${depth > 3 ? 3 : depth}" onclick="jumpToCourse('${k}')">${courseDB[k].code}</div>`;
+                    }
                 });
                 html += '</div>'; return html;
             } else {
                 if (!collection.size) return '<div class="p-empty">None</div>';
                 let cClass = type === 'post' ? 'chip-post' : 'chip-co';
-                return `<div class="chips">${Array.from(collection).map(k => `<div class="chip ${cClass}" onclick="jumpToCourse('${k}')">${courseDB[k].code}</div>`).join('')}</div>`;
+                return `<div class="chips">${Array.from(collection).map(k => {
+                    if (isElective(k)) {
+                        return `<div class="chip chip-elective" title="Elective — not on main plan">⭐ ${courseDB[k].code}</div>`;
+                    }
+                    return `<div class="chip ${cClass}" onclick="jumpToCourse('${k}')">${courseDB[k].code}</div>`;
+                }).join('')}</div>`;
             }
         };
         const cNumHtml = c.cNum ? `<span class="panel-cnum">${c.cNum}</span>` : '';
+        const electiveBadge = c.level === 99 ? `<div style="display:inline-flex;align-items:center;gap:5px;margin-top:8px;padding:5px 10px;background:var(--bg-col);border:1.5px dashed #94a3b8;border-radius:6px;font-size:11px;color:var(--text-sub);">⭐ Program Elective — not shown on main plan</div>` : '';
         document.getElementById('panel-body').innerHTML = `
             <div class="panel-code"><span>${c.code}</span> ${cNumHtml}</div>
             <div class="panel-name">${c.name}</div>
+            ${electiveBadge}
             <div class="panel-divider"></div>
             <div class="panel-sec-title">Prerequisites</div>
             ${buildChips(rels.pre, 'pre', true)}
